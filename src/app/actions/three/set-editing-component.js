@@ -4,7 +4,6 @@ import { loadCanvasFromMesh } from "./load-canvas-from-mesh";
 import * as THREE from "three";
 
 export function setEditingComponent(
-  editingComponent,
   clickedMesh,
   fabricTexture,
   fabricCanvas,
@@ -13,20 +12,11 @@ export function setEditingComponent(
   animate,
   canvasSize
 ) {
-  editingComponent.current = clickedMesh;
-  if (!editingComponent.current) return;
-  if (animate) animateEmissiveColor(editingComponent.current, 400);
-  if (!editingComponent.current.userData.canvas)
-    assignCanvasToMesh(editingComponent.current, canvasSize);
-  setTimeout(() => {
-    loadCanvasFromMesh(
-      editingComponent.current,
-      fabricTexture,
-      fabricCanvas,
-      updateTexture
-    );
-    if (editingComponent.current.material)
-      editingComponent.current.material.map = fabricTexture;
-  }, 0);
-  setEditingComponentName(editingComponent.current.name);
+  //if (!editingComponent.current) return;
+  if (animate) animateEmissiveColor(clickedMesh, 400);
+  if (!clickedMesh.userData.canvas) assignCanvasToMesh(clickedMesh, canvasSize);
+  loadCanvasFromMesh(clickedMesh, fabricTexture, fabricCanvas, updateTexture);
+  //if (editingComponent.current.material)
+  clickedMesh.material.map = fabricTexture;
+  setEditingComponentName(clickedMesh.name);
 }

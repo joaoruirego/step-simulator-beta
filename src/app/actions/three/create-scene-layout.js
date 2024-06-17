@@ -40,6 +40,45 @@ export function createSceneLayout() {
   areaLightBack.lookAt(0, 0, 0);
   scene.add(areaLightBack);*/
 
+  // const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+  // scene.add(ambientLight);
+  // ambientLight.lookAt(0, 0, 0);
+  // const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
+  // scene.add(hemisphereLight);
+
+  const ambientLight = new THREE.AmbientLight(0xffffff, 2); // luz para se ver à frente
+  ambientLight.lookAt(0, 0, 0);
+  ambientLight.castShadow = true;
+
+  const directionLight = new THREE.DirectionalLight(0xffffff, 0.5); // luz para se ver à frente
+  const directionLightTRAS = new THREE.DirectionalLight(0xffffff, 0.5); // luz para se ver à frente
+  directionLight.position.set(0, 5, 20);
+  directionLightTRAS.position.set(0, -5, -20);
+  directionLight.lookAt(0, 0, 0);
+  directionLightTRAS.lookAt(0, 0, 0);
+
+  const spotlight = new THREE.SpotLight(0xffffff, 3, 0, Math.PI / 3, 0.5, 1.5); // luz para se ver à frente
+  const spotlightTRAS = new THREE.SpotLight(
+    0xffffff,
+    3,
+    0,
+    Math.PI / 3,
+    0.5,
+    1
+  ); // luz para se ver à frente
+  spotlight.position.set(0, 5, 5);
+  spotlightTRAS.position.set(0, 5, -5);
+  spotlight.lookAt(0, 0, 0);
+  spotlightTRAS.lookAt(0, 0, 0);
+  spotlight.castShadow = true;
+  spotlightTRAS.castShadow = true;
+
+  scene.add(ambientLight);
+  scene.add(directionLight);
+  scene.add(directionLightTRAS);
+  scene.add(spotlight);
+  scene.add(spotlightTRAS);
+
   const orbit = new OrbitControls(camera, renderer.domElement);
   orbit.target.set(0, 0, 0);
   orbit.enableDamping = true;
@@ -58,8 +97,8 @@ export function createSceneLayout() {
 
   //scene.fog = new THREE.FogExp2(0xf4f4f4, 0.0161);
 
-  scene.environment = hdri("/hdri5.exr", renderer, scene);
-  scene.environmentIntensity = 0.65;
+  // scene.environment = hdri("/hdri5.exr", renderer, scene);
+  // scene.environmentIntensity = 2.7;
 
   return {
     scene: scene,

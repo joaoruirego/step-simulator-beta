@@ -49,7 +49,7 @@ export const loadGLBModel = (
         path,
         function (gltf) {
           // Ajuste da posição inicial da cena do modelo
-          gltf.scene.position.set(0, -0.6, 0);
+          gltf.scene.position.set(0, -1, 0);
           gltf.scene.traverse(function (child) {
             if (child.isMesh) {
               if (child.name.includes("TEXT")) {

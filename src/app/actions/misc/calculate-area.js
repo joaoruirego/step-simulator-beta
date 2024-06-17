@@ -4,25 +4,29 @@ import { calculateUVArea } from "../three/get-uv-data";
 import * as THREE from "three";
 import { isPointInUV } from "./isPointInUV";
 
-export function calculateArea(fabricCanvases, sceneRef, setAnimatedPrice) {
+export function calculateArea(sceneRef, setAnimatedPrice) {
   console.log("start");
   let totalPrice = 13.25;
   console.log(totalPrice);
   let realPartArea;
 
-  fabricCanvases.forEach((canvas) => {
-    let percentageOccupiedByUV;
-    let meshGeometry;
-    sceneRef.current.children.forEach((child) => {
-      if (child instanceof THREE.Group) {
-        child.children.forEach((mesh) => {
-          if (mesh.name == canvas.part) {
-            percentageOccupiedByUV = calculateUVArea(mesh.geometry);
-            meshGeometry = mesh.geometry;
-          }
-        });
-      }
-    });
+  let canvasesAndPercentages = [];
+
+  sceneRef.current.children.forEach((child) => {
+    if (child instanceof THREE.Group) {
+      child.children.forEach((mesh) => {
+        let percentageOccupiedByUV = calculateUVArea(mesh.geometry);
+        let canvas = mesh.userData.canvas;
+
+        if (canvas)
+          canvasesAndPercentages.push({ canvas, percentageOccupiedByUV });
+      });
+    }
+  });
+
+  canvasesAndPercentages.forEach((object) => {
+    let percentageOccupiedByUV = object.percentageOccupiedByUV;
+    let canvas = object.canvas;
 
     if (canvas.part.includes("body")) {
       realPartArea = 63 * 54; //cm^2

@@ -7,7 +7,8 @@ export function setBGColor(
   updateTexture
 ) {
   const color = hexColor.trim(); // Clean the input
-  if (color[0] !== "#" || color.length !== 7) return; // Ensure valid color
+  if (color[0] !== "#" || color.length !== 7 || !editingComponentRef.current)
+    return; // Ensure valid color
   editingComponentRef.current.material.emissive.setHex(0x000000); // Reset emissive color
 
   const canvas = canvasRef.current;

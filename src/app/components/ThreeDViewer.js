@@ -126,8 +126,6 @@ const ThreeDViewer = () => {
   const modelos = useRef(null);
   const titleModels = useRef(null);
 
-  const [fabricCanvases, setFabricCanvases] = useState([]);
-
   const [docId, setDocId] = useState("");
 
   const router = useRouter();
@@ -233,8 +231,9 @@ const ThreeDViewer = () => {
     });
 
     const texture = new THREE.CanvasTexture(fabricCanvas.current.getElement());
-    texture.repeat.y = -1;
-    texture.offset.y = 1;
+    texture.flipY = false;
+    texture.colorSpace = THREE.SRGBColorSpace;
+
     setFabricTexture(texture);
 
     return () => fabricCanvas.current.dispose();
@@ -287,6 +286,16 @@ const ThreeDViewer = () => {
 
     //ACTIONS////////////////////////////////////////////////////////////////////////////
     function onMouseDown(e) {
+      let numberOfFbricTextures = 0;
+      scene.children.forEach((child) => {
+        if (child instanceof THREE.Group) {
+          child.children.forEach((mesh) => {
+            if (mesh.material.map == fabricTexture) numberOfFbricTextures += 1;
+          });
+        }
+      });
+
+      console.log(numberOfFbricTextures);
       const isTouchEvent = e.type.includes("touch");
       const x = isTouchEvent ? e.touches[0].clientX : e.clientX;
       const y = isTouchEvent ? e.touches[0].clientY : e.clientY;
@@ -323,17 +332,17 @@ const ThreeDViewer = () => {
           editingComponent.current &&
           editingComponent.current != clickedMesh
         ) {
-          closeAllTabs();
+          console.log("active");
           storeCanvasAndTexture(
             editingComponent,
             fabricCanvas.current,
-            canvasSize,
-            setFabricCanvases,
-            fabricCanvases
+            canvasSize
           );
+
+          closeAllTabs();
+
           animate = true;
           setEditingComponent(
-            editingComponent,
             clickedMesh,
             fabricTexture,
             fabricCanvas,
@@ -346,7 +355,6 @@ const ThreeDViewer = () => {
         if (!editingComponent.current) {
           animate = true;
           setEditingComponent(
-            editingComponent,
             clickedMesh,
             fabricTexture,
             fabricCanvas,
@@ -400,13 +408,13 @@ const ThreeDViewer = () => {
 
         //NÃO INTERSETA
       } else {
+        console.log("not");
+        selectedMesh.current = null;
         if (editingComponent.current)
           storeCanvasAndTexture(
             editingComponent,
             fabricCanvas.current,
-            canvasSize,
-            setFabricCanvases,
-            fabricCanvases
+            canvasSize
           );
         closeEditor();
         setTimeout(() => {
@@ -419,6 +427,7 @@ const ThreeDViewer = () => {
 
         editZoneRefChild.current.style.opacity = "1";
       }
+      editingComponent.current = selectedMesh.current;
     }
 
     const onMouseMove = (e) => {
@@ -930,7 +939,7 @@ const ThreeDViewer = () => {
                   model,
                   sceneRef
                 );
-                calculateArea(fabricCanvases, sceneRef, setAnimatedPrice);
+                calculateArea(sceneRef, setAnimatedPrice);
                 setPreview(!preview);
                 setTimeout(() => {
                   closeEditor();

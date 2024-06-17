@@ -8,6 +8,6 @@ export function assignCanvasToMesh(mesh, canvasSize) {
     backgroundColor: "#fff",
     part: mesh.name,
   });
-  if (mesh && mesh.userData && mesh.userData.canvas)
-    mesh.userData.canvas = ownCanvas;
+  //if (mesh && mesh.userData && mesh.userData.canvas)
+  mesh.userData.canvas = ownCanvas;
 }
