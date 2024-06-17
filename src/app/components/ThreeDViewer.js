@@ -971,7 +971,7 @@ const ThreeDViewer = () => {
                     Voltar à personalização
                   </p>
                 )
-              ) : window.innerWidth < 715 ? (
+              ) : windowWidth < 715 ? (
                 "->"
               ) : (
                 "Concluído"
@@ -1036,7 +1036,7 @@ const ThreeDViewer = () => {
         <div ref={backgroundMagic} className={styles.modelsZone}>
           <div ref={modelosZone} className={styles.modelsList}>
             <h1 ref={titleModels} className={styles.title}>
-              {window.innerWidth > 715 ? (
+              {windowWidth > 715 ? (
                 <b>Escolhe o teu modelo</b>
               ) : (
                 <b>
